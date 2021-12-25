@@ -1,10 +1,9 @@
 import type { LinksFunction } from "remix";
-import { Links, LiveReload, Outlet } from "remix";
+import { Links, LiveReload, Outlet, useCatch } from "remix";
 
 import globalStylesUrl from "./styles/global.css";
 import globalMediumStylesUrl from "./styles/global-medium.css";
 import globalLargeStylesUrl from "./styles/global-large.css";
-import React from "react";
 
 export const links: LinksFunction = () => {
   return [
@@ -20,7 +19,7 @@ export const links: LinksFunction = () => {
     {
       rel: "stylesheet",
       href: globalLargeStylesUrl,
-      media: "print, (min-width: 1024)",
+      media: "screen and (min-width: 1024px)",
     },
   ];
 };
@@ -51,6 +50,20 @@ export default function App() {
   return (
     <Document>
       <Outlet />
+    </Document>
+  );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  return (
+    <Document title={`${caught.status} ${caught.statusText}`}>
+      <div className="error-container">
+        <h1>
+          {caught.status} {caught.statusText}
+        </h1>
+      </div>
     </Document>
   );
 }
