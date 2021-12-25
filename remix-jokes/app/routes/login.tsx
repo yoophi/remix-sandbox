@@ -1,4 +1,4 @@
-import type { ActionFunction, LinksFunction } from "remix";
+import type { ActionFunction, LinksFunction, MetaFunction } from "remix";
 import { useActionData, json, Link, useSearchParams } from "remix";
 import { db } from "~/utils/db.server";
 import { createUserSession, login, register } from "~/utils/session.server";
@@ -6,6 +6,13 @@ import stylesUrl from "../styles/login.css";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
+};
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "Remix Jokes | Login",
+    description: "Login to submit your own jokes to Remix Jokes!",
+  };
 };
 
 function validateUsername(username: unknown) {
@@ -63,7 +70,6 @@ export const action: ActionFunction = async ({ request }) => {
   switch (loginType) {
     case "login": {
       const user = await login({ username, password });
-      console.log({ user });
       if (!user) {
         return badRequest({
           fields,
@@ -86,7 +92,7 @@ export const action: ActionFunction = async ({ request }) => {
       if (!user) {
         return badRequest({
           fields,
-          formError: `Something went wrong trying to create new user.`,
+          formError: `Something went wrong trying to create a new user.`,
         });
       }
       return createUserSession(user.id, redirectTo);
