@@ -4,8 +4,13 @@ import {
   Meta,
   Outlet,
   Scripts,
-  ScrollRestoration
+  ScrollRestoration,
 } from "remix";
+import tailwindUrl from "./tailwind.css";
+
+export function links() {
+  return [{ rel: "stylesheet", href: tailwindUrl }];
+}
 
 export function meta() {
   return { title: "New Remix App" };
